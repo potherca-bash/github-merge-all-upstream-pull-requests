@@ -6,7 +6,9 @@ source './deps/includes/src/comment/license/comment.license-gpl3.inc'
 source './deps/includes/src/declare/declare.color.inc'
 source './deps/includes/src/declare/declare.exit-codes.inc'
 
-readonly VERSION=0.1.0
+readonly VERSION=0.1.1
+
+: "${GITHUB_TOKEN?Environmental variable 'GITHUB_TOKEN' must be set to autheticate against the Github API}"
 
 # ==========================================================================
 # @TODO: What to do with merge conflicts? Can we grab things from the git-split?
@@ -52,14 +54,14 @@ github-merge-all-upstream-pull-requests () {
         echo " =====> Fetching page list"
         while [[ "${bNext}" == true ]]; do
             let iPage=iPage+1
-            ( curl -s -o /dev/null -D - "${sApiUrl}/pulls?per_page=100&page=${iPage}" | grep "next" ) \
+            ( curl -u "${GITHUB_TOKEN}:x-oauth-basic" -s -o /dev/null -D - "${sApiUrl}/pulls?per_page=100&page=${iPage}" | grep "next" ) \
             && bNext=true \
             || bNext=false
         done
 
         echo " =====> Fetching pages"
         while [[ "${iPage}" -gt 0 ]]; do
-            curl -sL -o "${sDirectory}/pulls-${iPage}.log" "${sApiUrl}/pulls?per_page=100&page=${iPage}"
+            curl -u "${GITHUB_TOKEN}:x-oauth-basic" -sL -o "${sDirectory}/pulls-${iPage}.log" "${sApiUrl}/pulls?per_page=100&page=${iPage}"
             let iPage=iPage-1 || true
         done
     }

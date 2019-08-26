@@ -1,6 +1,6 @@
 {
   "name": "potherca-bash/github-merge-all-upstream-pull-requests",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Merge all pull-requests from a Github repository to a local git repo.",
   "dependencies": {
     "potherca-bash/includes": "master"
