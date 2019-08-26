@@ -52,6 +52,7 @@ github-merge-all-upstream-pull-requests () {
         bNext=true
 
         echo " =====> Fetching page list"
+        # @FIXME: Rather than itterating the ENTIRE LIST, just grab the `rel="last"` from the first request!
         while [[ "${bNext}" == true ]]; do
             let iPage=iPage+1
             ( curl -u "${GITHUB_TOKEN}:x-oauth-basic" -s -o /dev/null -D - "${sApiUrl}/pulls?per_page=100&page=${iPage}" | grep "next" ) \
